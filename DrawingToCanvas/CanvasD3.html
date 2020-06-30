@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    </head>
+    <body>
+        <div id="container"></div>
+        <script>
+            var canvasHeight = 600, canvasWidth = 600;
+            var canvas = d3.select("#container")
+                .append("canvas")
+                .attr("width", canvasWidth)
+                .attr("height", canvasHeight);
+            var ctx = canvas.node().getContext("2d");
+
+            var customSVG = document.createElement("customSVG");
+            var base = d3.select(customSVG);
+
+        </script>
+    </body>
+</html>
