@@ -48,8 +48,14 @@ ctx.drawImage(image, graphGroupX - 225, graphGroupY + 80, 130, 130);
 ctx.fillStyle = "navy";
 ctx.fillRect(footerX, footerY, infogWidth, 50);
 
-image = document.getElementById("image");
-ctx.drawImage(image, footerX + 10, footerY + 5, 250, 40);
+// image = document.getElementById("image");
+// ctx.drawImage(image, footerX + 10, footerY + 5, 120, 40);
+
+image = new Image();
+image.onload = function() {
+    ctx.drawImage(image, footerX + 10, footerY + 5, 180, 40);
+}
+image.src = "src/nida-logo.svg";
 
 ctx.fillStyle = "white";
 ctx.textAlign = "center";
