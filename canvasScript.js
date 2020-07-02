@@ -4,7 +4,7 @@ var graphGroupX = (infogWidth / 2) - 40, graphGroupY = 150;
 var footerX = 0, footerY = infogHeight - 50;
 
 // other
-var textColor = "navy";
+var textColor = "navy", textFont = "Oswald, sans-serif";
 
 // setting up canvas
 var canvas = document.getElementById("canvas");
@@ -20,7 +20,7 @@ ctx.fillRect(0, 0, infogWidth, 50);
 ctx.fillStyle = textColor;
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.font = "16px Oswald sans-serif";
+ctx.font = "16px " + textFont;
 ctx.fillText("Rx DRUG MUSUSE has mixed results", infogWidth / 2, 25);
 
 ctx.fillStyle = "lavender";
@@ -32,14 +32,14 @@ ctx.fillRect(20, 50, infogWidth - 40, infogHeight);
 ctx.fillStyle = textColor;
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.font = "bold 13px Oswald sans-serif";
+ctx.font = "bold 13px " + textFont;
 ctx.fillText("2018 Monitoring the Future College Students and Young Adults " +
     "Survey Results", infogWidth / 2, 75);
 
-ctx.font = "16px Oswald sans-serif";
+ctx.font = "16px " + textFont;
 ctx.fillText("Rx OPIOID MUSUSE: SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*", infogWidth / 2, 125);
 
-ctx.font = "100 16px Oswald sans-serif";
+ctx.font = "100 16px " + textFont;
 ctx.fillText("PAST YEAR MISUSE", graphGroupX + 120, graphGroupY + 20);
 
 var image = document.getElementById("image2");
@@ -60,7 +60,7 @@ image.src = "src/nida-logo.svg";
 ctx.fillStyle = "white";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.font = "16px Oswald sans-serif";
+ctx.font = "16px " + textFont;
 ctx.fillText("DRUGABUSE.GOV", infogWidth - 100, footerY + 25);
 
 /* D3 + CANVAS CODE FOR BAR GRAPHS */
@@ -77,7 +77,7 @@ var xScale = d3.scaleBand()
 ctx.fillStyle = "Slateblue";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.font = "700 12px Oswald sans-serif";
+ctx.font = "700 12px " + textFont;
 ctx.fillText("FEMALES in thousands", graphGroupX + 15, graphGroupY + 70);
 
 // Drawing the graph
@@ -158,7 +158,7 @@ d3.csv("female.csv", function(error, data) {
 ctx.fillStyle = "Slateblue";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
-ctx.font = "700 12px Oswald sans-serif";
+ctx.font = "700 12px " + textFont;
 ctx.fillText("MALES in thousands", graphGroupX + 220, graphGroupY + 70);
 
 // D3 code
