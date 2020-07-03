@@ -1,3 +1,35 @@
+// desc: This function bolds the text from 0 to rightBound and makes the text from
+//       rightBound to text.length normal 
+//
+// parameters:
+// -----------
+// ctx : canvas context 
+//      ctx allows function to draw text to the canvas
+// text : string
+//      The text we want to output to the screen
+// x : int
+//      X position of text
+// y : int
+//      Y position of text
+// font : string
+//      Font of text the function will output
+// color : string
+//      Color of text the function will output
+// rightBound : int
+//      Right most character we want to make bold
+function LeftBold(ctx, text, x, y, font, fontSize, color, rightBound) {
+    ctx.fillStyle = color;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold " + fontSize + "px " + font;
+    ctx.fillText(text.substring(0, rightBound), x - (ctx.measureText(text).width) / 2, y);
+
+    ctx.font = fontSize + "px " + font;
+    console.log("text length: " + text.length);
+    ctx.fillText(text.substring(rightBound, text.length), (x - ctx.measureText(text).width / 2
+        + ctx.measureText(text.substring(0, rightBound)).width) - 3, y);
+}
+
 // dimensions
 var infogHeight = 480, infogWidth = 600;
 var graphGroupX = (infogWidth / 2) - 40, graphGroupY = 150;
@@ -17,12 +49,8 @@ ctx.scale(2,2);
 ctx.fillStyle = "#33cccc";
 ctx.fillRect(0, 0, infogWidth, 50);
 
-ctx.fillStyle = textColor;
-ctx.textAlign = "center";
-ctx.textBaseline = "middle";
-ctx.font = "16px " + textFont;
-ctx.fillText("Rx DRUG MUSUSE has mixed results", infogWidth / 2, 25);
-
+var text = "Rx DRUG MUSUSE has mixed results";
+LeftBold(ctx, text, (infogWidth / 2) + 9.35, 25, textFont, 16, textColor, 14);
 ctx.fillStyle = "lavender";
 ctx.fillRect(0, 50, infogWidth, infogHeight);
 
@@ -34,22 +62,18 @@ ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 ctx.font = "bold 13px " + textFont;
 ctx.fillText("2018 Monitoring the Future College Students and Young Adults " +
-    "Survey Results", infogWidth / 2, 75);
+    "Survey Results", (infogWidth / 2), 75);
 
-ctx.font = "16px " + textFont;
-ctx.fillText("Rx OPIOID MUSUSE: SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*", infogWidth / 2, 125);
-
+text = "Rx OPIOID MUSUSE:SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*"
+LeftBold(ctx, text, (infogWidth / 2) + 12.75, 125, textFont, 16, textColor, 17)
 ctx.font = "100 16px " + textFont;
-ctx.fillText("PAST YEAR MISUSE", graphGroupX + 120, graphGroupY + 20);
+ctx.fillText("PAST YEAR MISUSE", graphGroupX + 60, graphGroupY + 20);
 
 var image = document.getElementById("image2");
 ctx.drawImage(image, graphGroupX - 225, graphGroupY + 80, 130, 130);
 
 ctx.fillStyle = "navy";
 ctx.fillRect(footerX, footerY, infogWidth, 50);
-
-// image = document.getElementById("image");
-// ctx.drawImage(image, footerX + 10, footerY + 5, 120, 40);
 
 image = new Image();
 image.onload = function() {
