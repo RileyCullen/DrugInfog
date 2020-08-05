@@ -17,7 +17,8 @@
 //      Color of text the function will output
 // rightBound : int
 //      Right most character we want to make bold
-function LeftBold(ctx, text, x, y, font, fontSize, color, rightBound) {
+function LeftBold(ctx, text, x, y, font, fontSize, color, rightBound) 
+{
     ctx.fillStyle = color;
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
@@ -30,13 +31,31 @@ function LeftBold(ctx, text, x, y, font, fontSize, color, rightBound) {
         + ctx.measureText(text.substring(0, rightBound)).width) - 3, y);
 }
 
+function UpdateTitle()
+{
+    // Clearing old text 
+    ctx.font = "16px " + textFont;
+    ctx.fillStyle = "#33cccc";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    for (var i = 0; i < 8; i++) {
+        ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
+    }
+
+    currentTitle = document.getElementById("inputField").value;
+    ctx.fillStyle = textColor;
+    ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
+}
+
+document.getElementById("inputButton").addEventListener("click", UpdateTitle)
+
 // dimensions
 var infogHeight = 480, infogWidth = 600;
 var graphGroupX = (infogWidth / 2) - 40, graphGroupY = 150;
 var footerX = 0, footerY = infogHeight - 50;
 
 // other
-var textColor = "navy", textFont = "Oswald, sans-serif";
+var textColor = "navy", textFont = "'Oswald', sans-serif";
 
 // setting up canvas
 var canvas = document.getElementById("canvas");
@@ -49,10 +68,16 @@ ctx.scale(2,2);
 ctx.fillStyle = "#33cccc";
 ctx.fillRect(0, 0, infogWidth, 50);
 
-var text = "Rx DRUG MUSUSE has mixed results";
-LeftBold(ctx, text, (infogWidth / 2) + 9.35, 25, textFont, 16, textColor, 14);
+var currentTitle = "Rx DRUG MUSUSE has mixed results";
+/*LeftBold(ctx, currentTitle, (infogWidth / 2) + 9.35, 25, textFont, 16, textColor, 14);
 ctx.fillStyle = "lavender";
-ctx.fillRect(0, 50, infogWidth, infogHeight);
+ctx.fillRect(0, 50, infogWidth, infogHeight);*/ 
+
+ctx.font = "16px " + textFont;
+ctx.fillStyle = textColor;
+ctx.textBaseline = "middle";
+ctx.textAlign = "center";
+ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
 
 ctx.fillStyle = "white";
 ctx.fillRect(20, 50, infogWidth - 40, infogHeight);
@@ -64,22 +89,25 @@ ctx.font = "bold 13px " + textFont;
 ctx.fillText("2018 Monitoring the Future College Students and Young Adults " +
     "Survey Results", (infogWidth / 2), 75);
 
-text = "Rx OPIOID MUSUSE:SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*"
+var text = "Rx OPIOID MUSUSE:SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*"
 LeftBold(ctx, text, (infogWidth / 2) + 12.75, 125, textFont, 16, textColor, 17)
 ctx.font = "100 16px " + textFont;
 ctx.fillText("PAST YEAR MISUSE", graphGroupX + 60, graphGroupY + 20);
 
-var image = document.getElementById("image2");
-ctx.drawImage(image, graphGroupX - 225, graphGroupY + 80, 130, 130);
+var bottleImg = new Image();
+bottleImg.onload = function() {
+    ctx.drawImage(bottleImg, graphGroupX - 225, graphGroupY + 80, 130, 130);
+}
+bottleImg.src = "src/bottle.png";
 
 ctx.fillStyle = "navy";
 ctx.fillRect(footerX, footerY, infogWidth, 50);
 
-image = new Image();
-image.onload = function() {
-    ctx.drawImage(image, footerX + 10, footerY + 5, 180, 40);
+var logoImg = new Image();
+logoImg.onload = function() {
+    ctx.drawImage(logoImg, footerX + 10, footerY + 5, 180, 40);
 }
-image.src = "src/nida-logo.svg";
+logoImg.src = "src/nida-logo.svg";
 
 ctx.fillStyle = "white";
 ctx.textAlign = "center";
@@ -156,6 +184,7 @@ d3.csv("female.csv", function(error, data) {
    // drawing y-axis ticks
    ctx.fillStyle = "black";
    yTicks.forEach(d => {
+        console.log("d: " + d);
         ctx.moveTo(offsetX, yTop + (yScale(d) - 0.5));
         ctx.lineTo(offsetX - 6, yTop + (yScale(d) - 0.5));
    });

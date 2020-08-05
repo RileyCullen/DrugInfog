@@ -5,12 +5,20 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;600&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 
 </head>
 
 <body>
-    <div id="container">
-        <canvas id="canvas"></canvas>
+    <div>
+        <div id="container">
+            <canvas id="canvas"></canvas>
+        </div>
+        
+        <div id="inputContainer">
+            <textarea id="inputField" cols="40" rows="4">Enter title here...</textarea>
+            <button id="inputButton">Update text</button>
+        </div>
     </div>
     <script src="canvasScript.js"></script>
 </body>
