@@ -3,5 +3,17 @@
 }
 
 #inputContainer {
-    float: right;
+    display: grid;
+}
+
+#selectorDisplay {
+    grid-row: 1;
+}
+
+#inputField {
+    grid-row: 2;
+}
+
+#inputButton {
+    grid-row: 3;
 }

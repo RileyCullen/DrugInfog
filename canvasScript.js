@@ -31,28 +31,96 @@ function LeftBold(ctx, text, x, y, font, fontSize, color, rightBound)
         + ctx.measureText(text.substring(0, rightBound)).width) - 3, y);
 }
 
-function UpdateTitle()
+function SetTextElement(name, text, xPos, yPos, fontVal, fontSize, fillVal, clearVal)
 {
-    // Clearing old text 
-    ctx.font = "16px " + textFont;
-    ctx.fillStyle = "#33cccc";
+    return {
+        elementName: name,
+        currentValue: text,
+        font: fontVal,
+        fillStyle: fillVal,
+        clearStyle: clearVal,
+        textX: xPos,
+        textY: yPos,
+        x: (xPos - (ctx.measureText(text).width / 2)) * 2,
+        y: (yPos - (fontSize / 2)) * 2,
+        width: ((xPos - (ctx.measureText(text).width / 2)) + ctx.measureText(text).width) * 2,
+        height: ((yPos - (fontSize / 2)) + fontSize) * 2
+    };
+}
+
+function GetMousePosition(e)
+{
+    var canvasBounds = canvas.getBoundingClientRect();
+    return {
+        x: e.clientX - canvasBounds.left,
+        y: e.clientY - canvasBounds.top
+    };
+}
+
+function ClearText(textElement) 
+{
+    ctx.font = textElement.font;
+    ctx.fillStyle = textElement.clearStyle;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
     for (var i = 0; i < 8; i++) {
-        ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
+        ctx.fillText(textElement.currentValue, textElement.textX, textElement.textY);
     }
-
-    currentTitle = document.getElementById("inputField").value;
-    ctx.fillStyle = textColor;
-    ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
 }
 
-document.getElementById("inputButton").addEventListener("click", UpdateTitle)
+function UpdateText(textElement)
+{
+    var currentText = document.getElementById("inputField").value;
+    ctx.font = textElement.font;
+    ctx.fillStyle = textElement.fillStyle;
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    textElement.currentValue = currentText;
+    ctx.fillText(currentText, textElement.textX, textElement.textY);
+}
+
+function CreateHighlightRect(textElement)
+{
+    ctx.strokeStyle = "red";
+    ctx.strokeRect(textElement.x, textElement.y, textElement.width, textElement.height);
+}
+
+function RemoveHighlightRect(textElement)
+{
+    ctx.strokeStyle = textElement.clearStyle;
+    ctx.strokeRect(textElement.x, textElement.y, textElement.width, textElement.height);
+}
+
+document.getElementById("inputButton").addEventListener("click", () => {
+    if (selectedText != -1) {
+        ClearText(textElementArr[selectedText]);
+        UpdateText(textElementArr[selectedText]);
+    }
+});
+
+document.getElementById("canvas").addEventListener("click", e => {
+    var pos = GetMousePosition(e);
+    for (var i = 0; i < textElementArr.length; i++) {
+        if ((pos.x > textElementArr[i].x && pos.x < textElementArr[i].width) && (pos.y > textElementArr[i].y && pos.y < textElementArr[i].height)) {
+            /*RemoveHighlightRect(textElementArr[i]);
+            CreateHighlightRect(textElementArr[i]);*/
+            document.getElementById("selectorDisplay").value = textElementArr[i].elementName;
+            selectedText = i;
+            return;
+        }
+    }
+    /*RemoveHighlightRect(textElementArr[i]);*/
+    document.getElementById("selectorDisplay").value = "None";
+    selectedText = -1;
+});
 
 // dimensions
 var infogHeight = 480, infogWidth = 600;
 var graphGroupX = (infogWidth / 2) - 40, graphGroupY = 150;
 var footerX = 0, footerY = infogHeight - 50;
+
+var textElementArr = new Array(4);
+var selectedText = -1;
 
 // other
 var textColor = "navy", textFont = "'Oswald', sans-serif";
@@ -77,7 +145,12 @@ ctx.font = "16px " + textFont;
 ctx.fillStyle = textColor;
 ctx.textBaseline = "middle";
 ctx.textAlign = "center";
-ctx.fillText(currentTitle, (infogWidth / 2) + 9.35, 25);
+ctx.fillText(currentTitle, (infogWidth / 2), 25);
+
+textElementArr[0] = SetTextElement("Title", currentTitle, (infogWidth / 2), 25, "16px " + textFont, 16, textColor, "#33cccc"); 
+
+ctx.fillStyle = "lavender";
+ctx.fillRect(0, 50, infogWidth, infogHeight);
 
 ctx.fillStyle = "white";
 ctx.fillRect(20, 50, infogWidth - 40, infogHeight);
@@ -88,11 +161,19 @@ ctx.textBaseline = "middle";
 ctx.font = "bold 13px " + textFont;
 ctx.fillText("2018 Monitoring the Future College Students and Young Adults " +
     "Survey Results", (infogWidth / 2), 75);
+textElementArr[1] = SetTextElement("Description", "2018 Monitoring the Future College Students and Young Adults " +
+    "Survey Results", (infogWidth / 2), 75, "bold 13px " + textFont, 13, textColor, "white");
 
-var text = "Rx OPIOID MUSUSE:SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*"
-LeftBold(ctx, text, (infogWidth / 2) + 12.75, 125, textFont, 16, textColor, 17)
+
+var text = "Rx OPIOID MUSUSE: SIGNIFICANT FIVE-YEAR DROP IN BOTH GROUPS*"
+// LeftBold(ctx, text, (infogWidth / 2) + 12.75, 125, textFont, 16, textColor, 17)
+ctx.font = "16px " + textFont;
+ctx.fillText(text, (infogWidth / 2), 125);
+textElementArr[2] = SetTextElement("Subtitle", text, (infogWidth / 2), 125, "16px " + textFont, 16, textColor, "white");
+
 ctx.font = "100 16px " + textFont;
-ctx.fillText("PAST YEAR MISUSE", graphGroupX + 60, graphGroupY + 20);
+ctx.fillText("PAST YEAR MISUSE", graphGroupX + 120, graphGroupY + 20);
+textElementArr[3] = SetTextElement("Graph Title", "PAST YEAR MISUSE", graphGroupX + 120, graphGroupY + 20, "100 16px " + textFont, 16, textColor, "white");
 
 var bottleImg = new Image();
 bottleImg.onload = function() {
