@@ -37,10 +37,12 @@ function SetTextElement(name, text, xPos, yPos, fontVal, fontSize, fillVal, clea
         elementName: name,
         currentValue: text,
         font: fontVal,
+        fontSize: fontSize,
         fillStyle: fillVal,
         clearStyle: clearVal,
         textX: xPos,
         textY: yPos,
+        textWidth: ctx.measureText(text).width,
         x: (xPos - (ctx.measureText(text).width / 2)) * 2,
         y: (yPos - (fontSize / 2)) * 2,
         width: ((xPos - (ctx.measureText(text).width / 2)) + ctx.measureText(text).width) * 2,
@@ -75,26 +77,31 @@ function UpdateText(textElement)
     ctx.fillStyle = textElement.fillStyle;
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";
-    textElement.currentValue = currentText;
     ctx.fillText(currentText, textElement.textX, textElement.textY);
+    return SetTextElement(textElement.elementName, currentText, 
+        textElement.textX, textElement.textY, textElement.fontVal, textElement.fontSize,
+        textElement.fillStyle, textElement.clearStyle);
 }
 
 function CreateHighlightRect(textElement)
 {
     ctx.strokeStyle = "red";
-    ctx.strokeRect(textElement.x, textElement.y, textElement.width, textElement.height);
+    ctx.strokeRect((textElement.x / 2) - 5, (textElement.y / 2) - 5, textElement.textWidth + 10, textElement.fontSize + 10);
 }
 
 function RemoveHighlightRect(textElement)
 {
     ctx.strokeStyle = textElement.clearStyle;
-    ctx.strokeRect(textElement.x, textElement.y, textElement.width, textElement.height);
+    for (var i = 0; i < 8; i++) {
+        ctx.strokeRect((textElement.x / 2) - 5, (textElement.y / 2) - 5, textElement.textWidth + 10, textElement.fontSize + 10);
+    }
 }
 
 document.getElementById("inputButton").addEventListener("click", () => {
     if (selectedText != -1) {
         ClearText(textElementArr[selectedText]);
-        UpdateText(textElementArr[selectedText]);
+        RemoveHighlightRect(textElementArr[selectedText]);
+        textElementArr[selectedText] = UpdateText(textElementArr[selectedText]);
     }
 });
 
@@ -102,14 +109,14 @@ document.getElementById("canvas").addEventListener("click", e => {
     var pos = GetMousePosition(e);
     for (var i = 0; i < textElementArr.length; i++) {
         if ((pos.x > textElementArr[i].x && pos.x < textElementArr[i].width) && (pos.y > textElementArr[i].y && pos.y < textElementArr[i].height)) {
-            /*RemoveHighlightRect(textElementArr[i]);
-            CreateHighlightRect(textElementArr[i]);*/
+            if (selectedText != -1) RemoveHighlightRect(textElementArr[selectedText]);
+            CreateHighlightRect(textElementArr[i]);
             document.getElementById("selectorDisplay").value = textElementArr[i].elementName;
             selectedText = i;
             return;
         }
     }
-    /*RemoveHighlightRect(textElementArr[i]);*/
+    RemoveHighlightRect(textElementArr[selectedText]);
     document.getElementById("selectorDisplay").value = "None";
     selectedText = -1;
 });
